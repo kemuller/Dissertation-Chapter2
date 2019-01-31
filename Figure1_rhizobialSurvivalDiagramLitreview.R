@@ -34,7 +34,7 @@ nutman <- nutman[!nutman$pointType %in% c("yaxis","xaxis"),]
 nutman$log10rhizobiaPerGSoil <- nutman$Y * coef(yaxis)[2] + coef(yaxis)[1]
 nutman$daysWithoutHost <- nutman$X * coef(xaxis)[2] + coef(xaxis)[1]
 
-##Add in linear regression from Revellin et al. 1996
+##Add in linear regression from Revellin et al. 1996 (taken from Figure 5)
 revellin <- data.frame(years = c(1:12))
 revellin$log10rhizobiaPerGSoil <- -0.18*revellin$years + 5.3
 revellin$daysWithoutHost <- revellin$years * 360
@@ -95,7 +95,7 @@ lc <- grey(0,alpha=0.5)
 ptcex=2
 ylabtext <- expression("rhizobia g"^-1*"soil")
  
-#tiff("Figure1_rhizobiaSurvivalLitreview.tiff", width=6, height=5, units="in",res=100)
+#tiff("Figure1_rhizobiaSurvivalLitreview.tiff", width=6, height=5, units="in",res=300)
 par(mar=c(5,5,2,2)+0.1)
 plot(c(0:20),seq(1,7,length.out=21),type="n",
      ylab="",yaxt="n", xlab="years since last host crop or inoculation",cex.lab=1.4,cex.axis=1.3)
@@ -104,15 +104,19 @@ axis(2, at=c(1:7),labels=parse(text=paste0("10","^",1:7)),las=1,cex.axis=1.3)
 abline(h=2,lty=2,lwd=2)
 points(log10rhizobiaPerGSoil~yearsSinceHost, data=hirschtoplot,pch=ptt[1],type="b",bg=bgc, col=lc,cex=ptcex,lwd=2)
 points(hiltbold$yearsSinceHost,hiltbold$log10rhizobiaPerGSoil,pch=ptt[2], type="b",bg=bgc, col=lc,cex=ptcex,lwd=2)
-points(revyears$gr1, revslopes[1]*revyears$gr1 + revintercepts[1],pch=ptt[3],bg=bgc, col=lc,type="b",cex=ptcex,lwd=2)
-points(revyears$gr2, revslopes[2]*revyears$gr2 + revintercepts[2],pch=ptt[3],bg=bgc, col=lc,type="b",cex=ptcex,lwd=2)
+#points(revyears$gr1, revslopes[1]*revyears$gr1 + revintercepts[1],pch=ptt[3],bg=bgc, col=lc,type="b",cex=ptcex,lwd=2)
+#do a line instead of points for the revellin data
+points(revyears$gr1, revslopes[1]*revyears$gr1 + revintercepts[1],lty=2, col=lc,type="l",cex=ptcex,lwd=2)
+#points(revyears$gr2, revslopes[2]*revyears$gr2 + revintercepts[2],pch=ptt[3],bg=bgc, col=lc,type="b",cex=ptcex,lwd=2)
+points(revyears$gr2, revslopes[2]*revyears$gr2 + revintercepts[2],lty=2, col=lc,type="l",cex=ptcex,lwd=2)
 points(log10rhizobiaPerGSoil ~ yearsSinceHost, data=obaton[obaton$site=="t",],pch=ptt[4],type="b",bg=bgc,col=lc,cex=ptcex,lwd=2)
 points(log10rhizobiaPerGSoil ~ yearsSinceHost, data=obaton[obaton$site=="m",],pch=ptt[4],type="b",bg=bgc,col=lc,cex=ptcex,lwd=2)
 points(log10rhizobiaPerGSoil ~ yearsSinceHost, data=obaton[obaton$site=="d",],pch=ptt[4],type="b",bg=bgc,col=lc,cex=ptcex,lwd=2)
 points(log10rhizobiaPerGSoil ~ yearsSinceHost, data=narozna,pch=ptt[5],col=lc,bg=bgc,cex=ptcex,lwd=2)
 #points(log10rhizobiaPerGSoil ~ yearsSinceHost, data=nutman1, type="b")
 #points(log10rhizobiaPerGSoil ~ yearsSinceHost, data=nutman2, type="b")
-legend("topright",legend=c(1:5),pt.cex=2,pch=ptt,bty="n",pt.lwd=2,title = "ref.",col=lc, cex=1.3,pt.bg=bgc)
+legend("topright",legend=c(1:5),pt.cex=2,pch=ptt,bty="n",pt.lwd=2,title = "ref.",col=c(lc,lc,"white",lc,lc), cex=1.3,pt.bg=bgc)
+segments(x0=18,x1=19,y0=5.3,y1=5.3,col=lc, lwd=2,lty=2)
 par(mar=c(5,4,4,2)+0.1)
 #dev.off()
 
